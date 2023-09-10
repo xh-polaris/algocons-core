@@ -1,0 +1,59 @@
+server:
+  port: 5508
+  servlet:
+    context-path: /api
+
+logging:
+  level:
+    com.xhpolaris:
+      repository: info
+    org.springframework.web.filter:
+      CommonsRequestLoggingFilter: debug
+  file:
+    path: logs
+  logback:
+    rollingpolicy:
+      max-history: 30
+
+spring:
+  application:
+    name: freud
+  datasource:
+    url: jdbc:mysql://${mysql.host:localhost}/freud?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+    username: ${mysql.username:root}
+    password: ${mysql.password:root}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      validation-query: SELECT 1 FROM DUAL
+  jpa:
+    show-sql: true
+  servlet:
+    multipart:
+      max-file-size: 30MB
+      max-request-size: 30MB
+  data:
+    redis:
+      repositories:
+        enabled: false
+      host: ${redis.host:localhost}
+      port: ${redis.port:6379}
+      password: ${redis.password}
+      database: 0
+  cache:
+    type: redis
+  profiles:
+    active: default
+  mvc:
+    path-match:
+      matching-strategy: ant_path_matcher
+  jackson:
+    serialization:
+      WRITE_DATES_AS_TIMESTAMPS: true
+
+mybatis-plus:
+  mapper-locations: classpath*:/mapper/*.xml
+  type-enums-package: org.ecnusmartboys.application.dto.enums
+  configuration:
+    # 分页插件拦截器
+    interceptor: com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor
